@@ -7,7 +7,6 @@ import numpy as np
 import shapefile
 import os
 
-
 def download_map_image(filename, center, zoom, size, scale):
     urlparams = urllib.urlencode({'center': center,
                                   'zoom': str(zoom),
@@ -21,9 +20,12 @@ def download_map_image(filename, center, zoom, size, scale):
 
 
 def main():
+    with open("taxi_zone/taxi_zones.shp", "rb") as shp:
+        with open("taxi_zone/taxi_zones.dbf", "rb") as dbf:
+            r = shapefile.Reader(shp=shp, dbf=dbf)
+
     download_map_image()
 
 
 if __name__ == '__main__':
     main()
-
