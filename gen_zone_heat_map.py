@@ -1,11 +1,12 @@
 # author: Zhongyue Zhang
 #################
 
+import StringIO
+import urllib
+
+import fiona
 from PIL import Image
-import urllib, StringIO
-import numpy as np
-import shapefile
-import os
+
 
 def download_map_image(filename, center, zoom, size, scale):
     urlparams = urllib.urlencode({'center': center,
@@ -20,11 +21,9 @@ def download_map_image(filename, center, zoom, size, scale):
 
 
 def main():
-    with open("taxi_zone/taxi_zones.shp", "rb") as shp:
-        with open("taxi_zone/taxi_zones.dbf", "rb") as dbf:
-            r = shapefile.Reader(shp=shp, dbf=dbf)
+    with fiona.open('taxi_zone/taxizones_lat_lon.shp', 'r') as shapes:
 
-    download_map_image()
+        download_map_image()
 
 
 if __name__ == '__main__':
