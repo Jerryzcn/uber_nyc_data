@@ -39,7 +39,7 @@ def pixelstolatlon(px, py, zoom):
 def download_map(ullat, ullon, lrlat, lrlon, maptype):
     ############################################
 
-    zoom = 12  # be careful not to get too many images!
+    zoom = 14  # be careful not to get too many images!
 
     # Set some important parameters
     scale = 1
@@ -82,10 +82,12 @@ def download_map(ullat, ullon, lrlat, lrlon, maptype):
 
 
 def download_map_image(filename, maptype, bounds, zoom, size, scale):
+    extra = 0.01
     if os.path.isfile(filename):
         print 'already downloaded %s' % filename
         return
-    image = download_google_map.download_map(bounds[3], bounds[0], bounds[1], bounds[2], maptype)
+    image = download_google_map.download_map(bounds[3] + extra, bounds[0] - extra, bounds[1] - extra, bounds[2] + extra,
+                                             maptype)
     image.save(filename)
 
 
@@ -103,16 +105,16 @@ def download_map_image(filename, maptype, center, zoom, size, scale):
     im_buf = StringIO.StringIO(urllib.urlopen('http://maps.google.com/maps/api/staticmap?' + urlparams).read())
     image = Image.open(im_buf)
     image.save(filename)
-
 '''
+
 
 
 def main():
     with fiona.open('taxi_zone/taxi_zones_lat_lon.shp', 'r') as shapes:
-        download_map_image('map_img/satellite_low.png', 'satellite', shapes.bounds, 10, (1000, 1325), 2)
-        download_map_image('map_img/roadmap_low.png', 'roadmap', shapes.bounds, 10, (1000, 1325), 2)
-        download_map_image('map_img/terrain_low.png', 'terrain', shapes.bounds, 10, (1000, 1325), 2)
-        download_map_image('map_img/hybrid_low.png', 'hybrid', shapes.bounds, 10, (1000, 1325), 2)
+        download_map_image('map_img/satellite.png', 'satellite', shapes.bounds, 10, (1000, 1325), 2)
+        download_map_image('map_img/roadmap.png', 'roadmap', shapes.bounds, 10, (1000, 1325), 2)
+        download_map_image('map_img/terrain.png', 'terrain', shapes.bounds, 10, (1000, 1325), 2)
+        download_map_image('map_img/hybrid.png', 'hybrid', shapes.bounds, 10, (1000, 1325), 2)
 
 
 if __name__ == '__main__':
